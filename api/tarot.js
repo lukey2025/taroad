@@ -1,41 +1,46 @@
-// api/deepseek.js - Vercel Serverless
-import fetch from 'node-fetch';
-
 export default async function handler(req, res) {
-  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+    try {
+        const { cards } = req.body;
+        if (!cards || cards.length !== 3) {
+            return res.status(400).json({ error: "请提供三张塔罗牌。" });
+        }
 
-  try {
-    const { prompt } = req.body;
-    if (!prompt) return res.status(400).json({ error: 'Missing prompt' });
+        const prompt = `
+你是一名专业塔罗师，请根据三张塔罗牌进行解读。
+塔罗牌：${cards.join(", ")}
 
-    const DEEPSEEK_KEY = process.env.DEEPSEEK_API_KEY;
-    if (!DEEPSEEK_KEY) return res.status(500).json({ error: 'Missing DEEPSEEK_API_KEY in environment' });
+请严格输出以下结构：
+1. 【象征意义】
+2. 【情绪洞察】
+3. 【灵性建议】
+`;
 
-    // 调用 DeepSeek（示例 endpoint，请按 DeepSeek 文档确认）
-    const response = await fetch('https://api.deepseek.ai/v1/generate', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${DEEPSEEK_KEY}`
-      },
-      body: JSON.stringify({
-        prompt,
-        max_tokens: 800
-      })
-    });
+        const apiKey = process.env.DEEPSEEK_API_KEY;
 
-    if (!response.ok) {
-      const text = await response.text();
-      return res.status(response.status).json({ error: 'DeepSeek API error', detail: text });
+        const response = await fetch("https://api.deepseek.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "deepseek-chat",
+                messages: [
+                    { role: "system", content: "你是一名专业塔罗占卜师" },
+                    { role: "user", content: prompt }
+                ]
+            })
+        });
+
+        const data = await response.json();
+
+        if (!data.choices) {
+            return res.status(500).json({ error: "API 返回异常", detail: data });
+        }
+
+        res.status(200).json({ result: data.choices[0].message.content });
+
+    } catch (err) {
+        res.status(500).json({ error: "服务器错误", detail: err.message });
     }
-
-    const data = await response.json();
-    // data 结构依 DeepSeek 返回而定，尽量返回可读字段
-    // 假设 deepseek 返回 { text: "..." } 或 { result: "..." }
-    const result = data.text || data.result || data.choices?.[0]?.text || data.choices?.[0]?.message?.content || JSON.stringify(data);
-    return res.status(200).json({ result });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ error: 'Server error', detail: err.message });
-  }
 }
