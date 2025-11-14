@@ -1,59 +1,48 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>AstroSoul - AI 塔罗占卜</title>
-<link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AstroSoul - AI塔罗占卜</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Let AI reveal your inner universe</h1>
-      <p class="tagline">探索塔罗的智慧，找到你的人生指引</p>
-    </header>
+<div class="container">
+<header>
+<h1>Let AI reveal your inner universe</h1>
+<p class="tagline">探索塔罗的智慧，找到你的人生指引</p>
+</header>
 
-    <!-- 主题选择 -->
-    <main class="themes-container" id="home">
-      <div class="theme-card love" onclick="selectTheme('love')">
-        <div class="theme-icon">❤️</div>
-        <h2>爱情与关系</h2>
-        <p>探索你的情感世界，解读关系中的奥秘与可能</p>
-        <button class="theme-btn">开始占卜</button>
-      </div>
+<main class="themes-container">
+<div class="theme-card love" onclick="selectTheme('love')">
+<div class="theme-icon">❤️</div>
+<h2>爱情与关系</h2>
+<p>探索你的情感世界，解读关系中的奥秘与可能</p>
+<button class="theme-btn">开始占卜</button>
+</div>
+<div class="theme-card career" onclick="selectTheme('career')">
+<div class="theme-icon">💼</div>
+<h2>事业发展</h2>
+<p>洞察职业道路，发现机遇与挑战</p>
+<button class="theme-btn">开始占卜</button>
+</div>
+<div class="theme-card growth" onclick="selectTheme('growth')">
+<div class="theme-icon">🌱</div>
+<h2>自我成长</h2>
+<p>探索内在潜能，促进心灵成长</p>
+<button class="theme-btn">开始占卜</button>
+</div>
+</main>
 
-      <div class="theme-card career" onclick="selectTheme('career')">
-        <div class="theme-icon">💼</div>
-        <h2>事业发展</h2>
-        <p>洞察职业道路，发现机遇与挑战</p>
-        <button class="theme-btn">开始占卜</button>
-      </div>
-
-      <div class="theme-card growth" onclick="selectTheme('growth')">
-        <div class="theme-icon">🌱</div>
-        <h2>自我成长</h2>
-        <p>探索内在潜能，促进心灵成长</p>
-        <button class="theme-btn">开始占卜</button>
-      </div>
-    </main>
-
-    <!-- 占卜室 -->
-    <section id="reading-room" style="display:none;">
-      <button id="back-btn" onclick="backToHome()">← 返回首页</button>
-
-      <div class="instruction">
-        <p>请从下列三张牌中 **选择一张**（重复三轮，共选三张），每次选中后会出现下一组三张牌。</p>
-      </div>
-
-      <div class="tarot-container" id="tarot-container"></div>
-
-      <div class="reading-result" id="reading-result" style="display:none;">
-        <h3>你的塔罗解读</h3>
-        <div id="reading-text"></div>
-      </div>
-    </section>
-  </div>
-
-  <script src="app.js"></script>
+<div id="reading-room" style="display:none;">
+<button id="back-btn" onclick="backToHome()">返回首页</button>
+<div class="tarot-container" id="tarot-container"></div>
+<div class="reading-result" id="reading-result" style="display:none;">
+<h3>你的塔罗解读</h3>
+<div id="reading-text"></div>
+</div>
+</div>
+</div>
+<script src="app.js"></script>
 </body>
 </html>
