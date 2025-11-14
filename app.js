@@ -81,3 +81,28 @@ const data=await response.json();
 document.getElementById('reading-text').innerHTML=`<p>${data.text||'AI未返回结果，请稍后重试'}</p>`;
 }catch(err){console.error(err);document.getElementById('reading-text').innerHTML='<p>生成占卜失败，请检查网络或API Key</p>';}
 }
+async function generateReading(selectedCards) {
+    try {
+        const response = await fetch("/api/tarot", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                cards: selectedCards
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            alert("占卜失败：" + data.error);
+            return;
+        }
+
+        document.getElementById("reading-output").innerHTML = data.result;
+
+    } catch (err) {
+        alert("生成占卜失败，请检查网络或 API");
+        console.error(err);
+    }
+}
+
